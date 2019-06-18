@@ -30,7 +30,6 @@ import numpy as np
 import pandas as pd
 
 
-# 版本信息
 def model_info():
     version_info = "Version: 0.1"
     author_info = "Author: Wang Yang Jun"
@@ -39,11 +38,6 @@ def model_info():
     print(author_info)
     print(description)
 
-
-# 变量
-
-
-# 保存文件输入的参数，静态变量(全局共享)
 class Params(object):
     model_name = ""
     start_time = 0
@@ -76,7 +70,6 @@ class Params(object):
         print(Params.model_name)
 
 
-# 从json总读入参数
 def read_params(file_path):
     with open(file_path) as f:
         json_file = json.load(f)
@@ -107,8 +100,6 @@ def read_params(file_path):
         # sediment
         Params.subsidence_rate = json_file["sediment"]["subsidence_rate"]
 
-
-# 从文件读入初始地形
 def initialise_bathmetry(file_path):
     column_names = ['X', 'Y', 'Z']
     df = pd.read_csv(file_path, delimiter=",", header=None,
@@ -122,7 +113,6 @@ def initialise_bathmetry(file_path):
 
 if __name__ == '__main__':
 
-    # 传递参数
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', action='store', dest='json_path',
                         help='specify the path of params file.')
@@ -140,21 +130,15 @@ if __name__ == '__main__':
 
     print('The files {0!s} will be read into model.'.format(json_path))
 
-    # 读参数
     read_params(json_path)
 
-    # 列出参数
     Params.list()
-
-    # 初始化
-    # 网格数
     X = Params.x_length
     Y = Params.y_length
 
     loopX = 0
     loopY = 0
 
-    # 初始地形
 
     bathmetry = np.zeros((int(X), int(Y)))
 
@@ -166,18 +150,10 @@ if __name__ == '__main__':
 
     water_depth = np.zeros((int(X), int(Y)))
 
-    # 读入初始地形到bathmetry[]
     initialise_bathmetry(Params.initial_bathmetry_file)
 
     print(bathmetry)
 
-
-    # 双重循环遍历数组
-    '''
-    for x in bathmetry:
-        for y in x:
-            print(y, end=" ")
-    '''
 
     print(bathmetry.shape)
 
